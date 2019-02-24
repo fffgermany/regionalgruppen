@@ -1,8 +1,5 @@
 <?php
 
-function filterVisible($data, $showVars){
-  return array_filter($data, function($k) use ($showVars){ return in_array($k, $showVars); }, ARRAY_FILTER_USE_KEY); }
-
 class User{
   public $id;
   public $name;
@@ -13,11 +10,12 @@ class User{
   public $linktoken='';
   public $superadmin=0;
   public $aktiv=0;
-  public static $showVars=['name','description','ortsgruppe_id','aktiv'];
-
-  public static function visible($data){
-    return filterVisible($data, self::$showVars);
-  }
+  public $inserter;
+  public $inserted;
+  public $changer;
+  public $changed;
+  public static $showVars=['id','name','description','ortsgruppe_id','aktiv'];
+  public static $importVars=['name','description','ortsgruppe_id','aktiv'];
 }
 
 class Ortsgruppe { 
@@ -32,21 +30,43 @@ class Ortsgruppe {
   public $email;
   public $telnr;
   public $aktiv;
+  public $inserter;
+  public $inserted;
+  public $changer;
+  public $changed;
+  public static $showVars=['id','name','lat','lng','admin_id','description','twitter','facebook','email','telnr','aktiv'];
+  public static $importVars=['name','lat','lng','admin_id','description','twitter','facebook','email','telnr','aktiv'];
 }
 
 class Demo{
   public $id;
   public $ort;
   public $zeit;
+  public $ortsgruppe;
   public $teilnehmerzahl;
   public $beschreibung;
+  public $aktiv;
+  public $inserter;
+  public $inserted;
+  public $changer;
+  public $changed;
+  public static $showVars=['id','ort','zeit','ortsgruppe_id','teilnehmerzahl','beschreibung', 'aktiv'];
+  public static $importVars=['ort','zeit','ortsgruppe_id','teilnehmerzahl','beschreibung', 'aktiv'];
 }
 
 class Demopropaganda{
   public $id;
   public $demo;
   public $ortsgruppe;
+  public $name;
   public $content;
+  public $aktiv;
+  public $inserter;
+  public $inserted;
+  public $changer;
+  public $changed;
+  public static $showVars=['id','demo_id','ortsgruppe_id','name','content', 'aktiv'];
+  public static $importVars=['demo_id','ortsgruppe_id','name','content', 'aktiv'];
 }
 
 class Logging{

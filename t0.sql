@@ -16,7 +16,11 @@ create table ortsgruppe (
   facebook varchar(255),
   email varchar(255),
   telnr varchar(200),
-  aktiv tinyint
+  aktiv tinyint not null default 0,
+  inserter_id int(11),
+  changer_id int(11),
+  inserted datetime,
+  changed datetime
 );
 
 create table user(
@@ -28,7 +32,11 @@ create table user(
   ortsgruppe_id int(11), 
   linktoken varchar(255),
   superadmin tinyint not null default 0,
-  aktiv tinyint not null default 0
+  aktiv tinyint not null default 0,
+  inserter_id int(11),
+  changer_id int(11),
+  inserted datetime,
+  changed datetime
 );
 
 create table demo(
@@ -37,14 +45,25 @@ create table demo(
   ort varchar(255),
   zeit datetime not null,
   teilnehmerzahl int(11),
-  beschreibung text(30000)
+  beschreibung text(30000),
+  aktiv tinyint not null default 0,
+  inserter_id int(11),
+  changer_id int(11),
+  inserted datetime,
+  changed datetime
 );
 
 create table demopropaganda(
   id int(11) not null auto_increment primary key,
   demo int(11) not null,
-  ortsgruppe int(11) not null,
-  content varchar(300)
+  ortsgruppe_id int(11) not null,
+  name varchar(255),
+  content varchar(300),
+  aktiv tinyint not null default 0,
+  inserter_id int(11),
+  changer_id int(11),
+  inserted datetime,
+  changed datetime
 );
 
 create table logging(
