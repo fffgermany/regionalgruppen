@@ -31,6 +31,8 @@ $router->group(['prefix' => 'api/', 'middleware'=>'auth'], function ($router) {
   $router->get('demopropaganda/{id}/', 'DemoPropagandaController@show');
   $router->put('demopropaganda/{id}/', 'DemoPropagandaController@update');
   $router->delete('demopropaganda/{id}/', 'DemoPropagandaController@destroy');
+
+  $router->post('user/','UserController@prepareUser');
 });  
 
 $router->group(['prefix' => 'public/', 'middleware'=>[]], function ($router) {
