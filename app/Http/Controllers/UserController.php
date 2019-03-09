@@ -38,7 +38,6 @@ class UserController extends Controller
       'description' => 'required'
     ]);
 
-
     $user = User::Create($request->all());
     if( $request->user()->superadmin){
       $user->aktiv=true;
