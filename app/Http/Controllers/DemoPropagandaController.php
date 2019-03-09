@@ -77,11 +77,7 @@ class DemoPropagandaController extends Controller
    */
   public function edit($id)
   {
-<<<<<<< HEAD
-    $demopropaganda = DemoPropaganda::where('id', $id)->get();
-=======
     $demopropaganda = DemoPropaganda::find($id);
->>>>>>> Downgrade lumen 5.5
     return view('demopropaganda.editdemopropaganda',['demopropaganda' => $demopropaganda]);
   }
 
