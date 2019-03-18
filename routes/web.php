@@ -32,9 +32,6 @@ $router->group(['prefix' => 'api/', 'middleware'=>'auth'], function ($router) {
   $router->put('demopropaganda/{id}/', 'DemoPropagandaController@update');
   $router->delete('demopropaganda/{id}/', 'DemoPropagandaController@destroy');
 
-  $router->post('user/','UserController@prepareUser');
-
-  $router->get('user/{id}/activate','UserController@activateUser');
   $router->get('user/{id}/setPassword','UserController@activateUser');
 });  
 
@@ -47,6 +44,10 @@ $router->group(['prefix' => 'public/', 'middleware'=>[]], function ($router) {
 
   $router->get('demopropaganda/', 'DemoPropagandaController@list');
   $router->get('demopropaganda/{id}/', 'DemoPropagandaController@show');
+  $router->post('user/','UserController@prepareUser');
+  $router->get('user/{id}/activate','UserController@activateUser');
+
+
 });  
 $router->get('/register', 'UserController@showRegPage');
 $router->get('/', function () use ($router) {
