@@ -11,13 +11,13 @@ class DemoPropagandaController extends Controller
 {
   public function list(Request $request){
     $where = [];
-    if($request->ortsgruppe_id){
+    if($request->has('ortsgruppe_id')){
       $where[] = ['ortsgruppe_id','=',$request->ortsgruppe_id];
     }
-    if($request->demo_id){
+    if($request->has('demo_id')){
       $where[] = ['demo_id','=',$request->demo_id];
     }
-    if($request->name){
+    if($request->has('name')){
       $where[] = ['name','LIKE','%'.$request->name.'%'];
     }
     $demopropaganda = DemoPropaganda::where($where)->get(); 
@@ -40,11 +40,13 @@ class DemoPropagandaController extends Controller
     if($demopropaganda = DemoPropaganda::Create($request->all())){
       $admin = $request->user();
       $demopropaganda->inserter_id=$admin->id;
-
-      if(! $request->user()->superadmin){
-        if( $demopropaganda->ortsgruppe_id != $admin->ortsgruppe()->id){
-          return response()->json(['status' => 'fail', 'msg'=>'falsche Ortsgruppe, admin hat Rechte für ' . $admin->ortsgruppe->name]);
-        }
+      $demo = Demo::find($request->demo_id);
+      
+      if($demo == null){
+        return $response->json(['status'=>'fail','msg'=>'invalid demo id '.$request->demo_id]);
+      }
+      if($demo->ortsgruppe_id != $admin->ortsgruppe_id && ! $admin->superadmin){
+        return $response->json(['status'=>'fail','msg'=>'invalid demo id '.$request->demo_id]);
       }
 
       $demopropaganda->save();
@@ -62,7 +64,7 @@ class DemoPropagandaController extends Controller
    */
   public function show($id)
   {
-    $demopropaganda = DemoPropaganda::where('id', $id)->get();
+    $demopropaganda = DemoPropaganda::find($id);
     return response()->json($demopropaganda);
 
   }
@@ -75,7 +77,7 @@ class DemoPropagandaController extends Controller
    */
   public function edit($id)
   {
-    $demopropaganda = DemoPropaganda::where('id', $id)->get();
+    $demopropaganda = DemoPropaganda::find($id);
     return view('demopropaganda.editdemopropaganda',['demopropaganda' => $demopropaganda]);
   }
 

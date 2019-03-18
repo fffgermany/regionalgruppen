@@ -1,6 +1,6 @@
 # drop database regionalgruppen;
 create database regionalgruppen;
-#create user 'reggru'@'localhost' identified by 'ampelmittwoch';
+#create user 'reggru'@'localhost' identified by 'a****ch';
 #grant all privileges on regionalgruppen.* to 'reggru'@'localhost';
 use regionalgruppen;
 \W

@@ -11,17 +11,17 @@ class DemoController extends Controller
 {
   public function list(Request $request){
     $where = [];
-    if($request->ortsgruppe_id){
+    if($request->has('ortsgruppe_id')){
       $where[] = ['ortsgruppe_id','=',$request->ortsgruppe_id];
     }
-    if($request->name){
+    if($request->has('name')){
       $where[] = ['name','LIKE','%'.$request->name.'%'];
     }
-    if($request->zeit && $request->zeit->von && $request->zeit->bis){
+    if($request->has('zeit') && $request->zeit->von && $request->zeit->bis){
       $where[] = ['zeit','>=', $request->zeit->von];
       $where[] = ['zeit','<=', $request->zeit->bis];
     }
-    if($request->area && $request->area->latmax && $request->area->latmin && $request->area->lngmax && $request->area->lngmin){
+    if($request->has('area') && $request->area->latmax && $request->area->latmin && $request->area->lngmax && $request->area->lngmin){
       $where[] = ['lat','<=', $request->area->latmax];
       $where[] = ['lat','>=', $request->area->latmin];
       $where[] = ['lng','<=', $request->area->lngmax];

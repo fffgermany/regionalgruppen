@@ -18,10 +18,10 @@ class OrtsgruppeController extends Controller
 
   public function list(Request $request){
     $where = [];
-    if($request->name){
+    if($request->has('name')){
       $where[] = ['name','LIKE','%'.$request->name.'%'];
     }
-    if($request->area && $request->area->latmax && $request->area->latmin && $request->area->lngmax && $request->area->lngmin){
+    if($request->has('area') && $request->area->latmax && $request->area->latmin && $request->area->lngmax && $request->area->lngmin){
       $where[] = ['lat','<=', $request->area->latmax];
       $where[] = ['lat','>=', $request->area->latmin];
       $where[] = ['lng','<=', $request->area->lngmax];
@@ -63,7 +63,7 @@ class OrtsgruppeController extends Controller
    */
   public function show($id)
   {
-    $og = Ortsgruppe::where('id', $id)->get();
+    $og = Ortsgruppe::find($id);
     return response()->json($og);
 
   }
@@ -76,7 +76,7 @@ class OrtsgruppeController extends Controller
    */
   public function edit($id)
   {
-    $og = Ortsgruppe::where('id', $id)->get();
+    $og = Ortsgruppe::find($id);
     return view('ortsgruppe.editog',['ortsgruppe' => $og]);
   }
 
