@@ -126,6 +126,7 @@ $mail=new PHPMailer(true);
   
   public function showRegPage($request){
     return response("<!doctype html> <html> <head> </head> <body><form method=\"POST\" action=\"/user\">Name: <input type=\"text\" name=\"name\"/><br/>E-Mail:<input type=\"text\" name=\"email\"/><br/>Beschreibung:<input type=\"text\" name=\"description\"/><br/>Secret: <input type=\"text\" name=\"secret\"/><input type=\"text\" name=\"\"/></form></body></html>");
+  }
 
 
 }
