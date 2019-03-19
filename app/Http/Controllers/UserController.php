@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\User;
 use Laravel\Lumen\Routing\Controller as BaseController;
@@ -41,8 +43,8 @@ class UserController extends Controller
       'thesecret'=>'required'
     ]);
 
-    if($request->safety != env('thesecret')){
-      return response()->json(['status' => 'fail',response=>"nicht gut!"]);
+    if(! $request->has('thesecret') or $request->thesecret != env('thesecret')){
+      return response()->json(['status' => 'fail','response'=>"nicht gut!".env('thesecret')]);
     }
     sleep(2);
 
@@ -55,11 +57,13 @@ class UserController extends Controller
     }
     $user->password=Hash::make(Str::random(32));
     $user->linktoken=Hash::make(Str::random(32));
+$token=$user->linktoken;
+$email=$user->email;
 
     $user->save();
-    sendMail($user->email, $user->name, $user->id, $user->linktoken);
+    $this->sendMail($user->email, $user->name, $user->id, $user->linktoken);
 
-    return response()->json(['status'=>'success','linktoken'->$token, 'email'=>$request->input['email']]);
+    return response()->json(['status'=>'success','linktoken'->$token, 'email'=>$email]);
   }
 
 
@@ -69,20 +73,26 @@ public function sendMail($email, $name, $id, $token){
 $mail=new PHPMailer(true);
   $mail->SMTPDebug = 2;  
     $mail->isSMTP();                                      // Set mailer to use SMTP                                                               
-    $mail->Host = env('SMTP_SERVER');  // Specify main and backup SMTP servers                                                                      
+    $mail->Host = env('SMTP_HOST');  // Specify main and backup SMTP servers                                                                      
+Log::debug("host: ".$mail->Host);
     $mail->SMTPAuth = true;                               // Enable SMTP authentication                                                           
     $mail->Username = env('SMTP_USER'); // SMTP username                                                       
+    Log::debug($mail->Username);
     $mail->Password = env('SMTP_PASS');
+Log::debug("pw: '" . env('SMTP_PASS') . "'");
     $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted                                           
     $mail->Port = env('SMTP_PORT');                                    // TCP port to connect to                                                               
+    Log::debug($mail->Port);
 
    //Recipients
     $mail->setFrom(env('SMTP_FROM'));
+    Log::debug(env('SMTP_FROM'));
     $mail->addAddress($email,$name);     // Add a recipient                                                              
+    Log::debug("mail $email, name $name");
     $mail->Subject = 'Regionalgruppen Registrierung';
     $mail->Body    = "Hallo,\n\nauf der Webseite von FFF hat jemand - hoffentlich du selbst! - deine E-Mail Adresse registriert.\n\n"
       . "Wenn du das nicht warst, bitten wir um Entschuldigung. Wenn du es warst, dann ist hier dein Registrierungs-Link: \n"
-      . urlencode($_SERVER['SERVER_NAME']."/public/user/$id/activate?email=$email&name=$name&linktoken=$token") . "\n\n"
+      . $_SERVER['SERVER_NAME']."/public/user/$id/activate?email=$email&name=$name&linktoken=$token" . "\n\n"
       . " liebe Grüße, das FFF-Team\n";
     $mail->send();
 
@@ -96,11 +106,14 @@ $mail=new PHPMailer(true);
       'name' => 'required',
       'linktoken'=>'required'
     ]);
-    $user = User::where([
+Log::debug("search user '{$request->input('email')}' name '{$request->input('name')}' linktoken '{$request->input('linktoken')}'");
+    $alluser = User::where([
       ['email', "=",$request->input('email')],
       ['name', "=",$request->input('name')],
       ['linktoken', "=",$request->input('linktoken')],
-    ])->first();
+    ]);
+Log::debug("alluser=".print_r($alluser,1));
+    $user=$alluser->first();
     if( $request->user()->superadmin){
       $user->aktiv=true;
     }

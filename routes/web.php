@@ -49,7 +49,10 @@ $router->group(['prefix' => 'public/', 'middleware'=>[]], function ($router) {
 
 
 });  
-$router->get('/register', 'UserController@showRegPage');
+$router->group(['prefix' => 'register/', 'middleware'=>[]], function ($router) {
+  $router->get('/', 'UserController@showRegPage');
+});
+
 $router->get('/', function () use ($router) {
   return $router->app->version();
 });
