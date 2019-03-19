@@ -34,32 +34,32 @@ class UserController extends Controller
   }
 
   public function prepareUser(Request $request){
-	  $this->validate($request, [
-			  'email' => 'required|email',
-			  'name' => 'required',
-			  'description' => 'required',
-			  'thesecret'=>'required'
-	  ]);
+    $this->validate($request, [
+      'email' => 'required|email',
+      'name' => 'required',
+      'description' => 'required',
+      'thesecret'=>'required'
+    ]);
 
-	  if($request->safety != env('thesecret')){
-		  return response()->json(['status' => 'fail',response=>"nicht gut!"]);
-	  }
-	  sleep(2);
+    if($request->safety != env('thesecret')){
+      return response()->json(['status' => 'fail',response=>"nicht gut!"]);
+    }
+    sleep(2);
 
-	  $user = User::Create($request->all());
-	  if( $request->user()->superadmin){
-		  $user->aktiv=true;
-	  }
-	  else{
-		  $user->aktiv=false;
-	  }
-	  $user->password=Hash::make(Str::random(32));
-	  $user->linktoken=Hash::make(Str::random(32));
+    $user = User::Create($request->all());
+    if($request->has('user') && $request->user()->superadmin){
+      $user->aktiv=true;
+    }
+    else{
+      $user->aktiv=false;
+    }
+    $user->password=Hash::make(Str::random(32));
+    $user->linktoken=Hash::make(Str::random(32));
 
-	  $user->save();
-	  sendMail($user->email, $user->name, $user->id, $user->linktoken);
+    $user->save();
+    sendMail($user->email, $user->name, $user->id, $user->linktoken);
 
-	  return response()->json(['status'=>'success','linktoken'->$token, 'email'=>$request->input['email']]);
+    return response()->json(['status'=>'success','linktoken'->$token, 'email'=>$request->input['email']]);
   }
 
 
