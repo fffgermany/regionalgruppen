@@ -32,7 +32,7 @@ $router->group(['prefix' => 'api/', 'middleware'=>'auth'], function ($router) {
   $router->put('demopropaganda/{id}/', 'DemoPropagandaController@update');
   $router->delete('demopropaganda/{id}/', 'DemoPropagandaController@destroy');
 
-  $router->get('user/{id}/setPassword','UserController@activateUser');
+  $router->get('action/setPassword','UserController@activateUser');
 });  
 
 $router->group(['prefix' => 'public/', 'middleware'=>[]], function ($router) {
@@ -47,12 +47,11 @@ $router->group(['prefix' => 'public/', 'middleware'=>[]], function ($router) {
   $router->post('user/','UserController@prepareUser');
   $router->get('user/{id}/activate','UserController@activateUser');
 
-
 });  
 $router->group(['prefix' => 'register/', 'middleware'=>[]], function ($router) {
   $router->get('/', 'UserController@showRegPage');
 });
 
-$router->get('/', function () use ($router) {
-  return $router->app->version();
+$router->get('/{route:.*}/', function ()  {
+  return view('app');
 });
