@@ -32,7 +32,7 @@ $router->group(['prefix' => 'api/', 'middleware'=>'auth'], function ($router) {
   $router->put('demopropaganda/{id}/', 'DemoPropagandaController@update');
   $router->delete('demopropaganda/{id}/', 'DemoPropagandaController@destroy');
 
-  $router->get('action/setPassword','UserController@activateUser');
+  $router->get('action/verify','UserController@verify');
 });  
 
 $router->group(['prefix' => 'public/', 'middleware'=>[]], function ($router) {
