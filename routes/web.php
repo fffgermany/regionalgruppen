@@ -55,3 +55,7 @@ $router->group(['prefix' => 'register/', 'middleware'=>[]], function ($router) {
 $router->get('/{route:.*}/', function ()  {
   return view('app');
 });
+
+$router->get('/{route:.*}/', function ()  {
+  return view('app');
+});
