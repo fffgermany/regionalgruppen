@@ -40,7 +40,6 @@ class DemoController extends Controller
   public function store(Request $request)
   {
     $this->validate($request, [
-      'name' => 'required',
       'ort' => 'required',
       'zeit' => 'required',
     ]);
@@ -93,7 +92,6 @@ class DemoController extends Controller
   public function update(Request $request, $id)
   {
     $this->validate($request, [
-      'name' => 'required',
       'ort' => 'required',
       'zeit' => 'required',
     ]);
