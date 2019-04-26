@@ -24,14 +24,14 @@ class UserController extends Controller
 	'email' => 'required|email',
 	'password' => 'required'
     ]);
-    $user = User::where('email', $request->input('email'))->first();
+    $user = User::where('email', $request->input('email'))->first()->makeVisible('password');
     if($user && Hash::check($request->input('password'), $user->password) && $user->aktiv > 0 && $user->verified > 0){
 
       $apikey=Hash::make('chilligras'.Str::random(32));
       User::where('email', $request->input('email'))->update(['apikey' => "$apikey"]);;
       return response()->json(['status' => 'success','apikey' => $apikey]);
     }else{
-      return response()->json(['status' => 'fail'],401);
+      return response()->json(['status' => Hash::check($request->input('password'), $user->password)],401);
     }
     // */
   }
@@ -100,7 +100,7 @@ class UserController extends Controller
     $mail->Body    = "Hallo,\n\nauf der Webseite von FFF hat jemand - hoffentlich du selbst! - deine E-Mail Adresse registriert.\n\n"
       . "Wenn du das nicht warst, bitten wir um Entschuldigung. Wenn du es warst, dann ist hier dein Registrierungs-Link: \n"
       . $_SERVER['SERVER_NAME']."/public/user/$id/activate?email=$email&name=$name&linktoken=$token" . "\n\n"
-      . " liebe GrÃsse, das FFF-Team\n";
+      . " liebe Grï¿½sse, das FFF-Team\n";
     $mail->send();
   }
 

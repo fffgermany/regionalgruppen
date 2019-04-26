@@ -12,7 +12,7 @@
 */
 
 $router->group(['prefix' => 'api/', 'middleware'=>'auth'], function ($router) {
-  $router->get('login/','UserController@authenticate');
+  $router->post('login/','UserController@authenticate');
 
   $router->post('ortsgruppe/','OrtsgruppeController@store');
   $router->get('ortsgruppe/', 'OrtsgruppeController@list');
