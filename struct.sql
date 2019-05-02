@@ -137,7 +137,7 @@ CREATE TABLE `user` (
   `updated_at` datetime DEFAULT NULL,
   `apikey` varchar(255) DEFAULT NULL,
   `verified` tinyint(4) NOT NULL DEFAULT '0',
-  `telegram_apikey` varchar(255) DEFAULT NULL,
+  `telegram_userid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -151,4 +151,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-02  8:00:41
+-- Dump completed on 2019-05-02  8:14:12
