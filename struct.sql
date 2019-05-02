@@ -31,15 +31,15 @@ CREATE TABLE `demo` (
   `beschreibung` mediumtext,
   `aktiv` tinyint(4) NOT NULL DEFAULT '0',
   `inserter_id` int(11) DEFAULT NULL,
-  `admin_id` int(11) DEFAULT NULL,
   `changer_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `link` varchar(355) DEFAULT NULL,
   `lat` decimal(13,8) DEFAULT NULL,
   `lng` decimal(13,8) DEFAULT NULL,
+  `admin_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=186 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=205 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -58,10 +58,10 @@ CREATE TABLE `demopropaganda` (
   `aktiv` tinyint(4) NOT NULL DEFAULT '0',
   `inserter_id` int(11) DEFAULT NULL,
   `changer_id` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,12 +103,13 @@ CREATE TABLE `ortsgruppe` (
   `aktiv` tinyint(4) NOT NULL DEFAULT '0',
   `inserter_id` int(11) DEFAULT NULL,
   `changer_id` int(11) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL,
+  `inserted` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `whatsapp` varchar(255) DEFAULT NULL,
   `telegram` varchar(255) DEFAULT NULL,
   `signalmsg` varchar(255) DEFAULT NULL,
   `instagram` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=188 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -135,9 +136,9 @@ CREATE TABLE `user` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `apikey` varchar(255) DEFAULT NULL,
-  `verifies` tinyint(4) NOT NULL DEFAULT '0',
+  `verified` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -149,4 +150,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-13 10:02:48
+-- Dump completed on 2019-05-02  7:13:29
