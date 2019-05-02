@@ -10,6 +10,7 @@ use App\User;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use \Datetime;
 
 class UserController extends Controller
 {
@@ -25,15 +26,15 @@ class UserController extends Controller
 	'password' => 'required'
     ]);
     $user = User::where('email', $request->input('email'))->first()->makeVisible('password');
+    // ToDo check why Hash check
     if($user && Hash::check($request->input('password'), $user->password) && $user->aktiv > 0 && $user->verified > 0){
 
       $apikey=Hash::make('chilligras'.Str::random(32));
       User::where('email', $request->input('email'))->update(['apikey' => "$apikey"]);;
-      return response()->json(['status' => 'success','apikey' => $apikey]);
+      return response()->json(['status' => 'success','apikey' => $apikey, 'user' => $user]);
     }else{
       return response()->json(['status' => Hash::check($request->input('password'), $user->password)],401);
     }
-    // */
   }
 
   /**
@@ -70,7 +71,13 @@ class UserController extends Controller
     $user->save();
     $this->sendMail($user->email, $user->name, $user->id, $user->linktoken);
 
-    return response()->json(['status'=>'success','linktoken'->$token, 'email'=>$email]);
+
+    return response()->json(
+        ['status'=>'success'
+         ,'linktoken'=>$token
+         , 'email'=>$email
+        ]
+       );
   }
 
 
@@ -99,7 +106,7 @@ class UserController extends Controller
     $mail->Subject = 'Regionalgruppen Registrierung';
     $mail->Body    = "Hallo,\n\nauf der Webseite von FFF hat jemand - hoffentlich du selbst! - deine E-Mail Adresse registriert.\n\n"
       . "Wenn du das nicht warst, bitten wir um Entschuldigung. Wenn du es warst, dann ist hier dein Registrierungs-Link: \n"
-      . $_SERVER['SERVER_NAME']."/public/user/$id/activate?email=$email&name=$name&linktoken=$token" . "\n\n"
+      . $_SERVER['SERVER_NAME']."/api/action/verify?email=$email&name=$name&linktoken=$token" . "\n\n"
       . " liebe Gr�sse, das FFF-Team\n";
     $mail->send();
   }
@@ -182,7 +189,7 @@ class UserController extends Controller
   }
 
   public function showRegPage(Request $request){
-    return response("<!doctype html> <html> <head> </head> <body><form method=\"POST\" action=\"/public/user\">Name: <input type=\"text\" name=\"name\"/><br/>E-Mail:<input type=\"text\" name=\"email\"/><br/>Beschreibung:<input type=\"text\" name=\"description\"/><br/>Secret: <input type=\"text\" name=\"thesecret\"/><br/><button type=\"submit\"name=\"OK\">ok</button></form></body></html>");
+    return response("<!doctype html> <html> <head> </head> <body><form method=\"POST\" action=\"/public/user\">Name: <input type=\"text\" name=\"name\"/><br/>E-Mail:<input type=\"text\" name=\"email\"/><br/>Beschreibung:<input type=\"text\" name=\"description\"/><br/>Password:<input type=\"password\" name=\"password\"/><br/>  <br/>Secret: <input type=\"text\" name=\"thesecret\"/><br/><button type=\"submit\"name=\"OK\">ok</button></form></body></html>");
   }
 
 

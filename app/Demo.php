@@ -12,7 +12,7 @@ class Demo extends Model
 {
   protected $table="demo";
 
-  protected $fillable = ['ortsgruppe_id','ort','name','lat','lng','zeit','teilnehmerzahl','description','aktiv', 'inserter_id','changer_id'];
+  protected $fillable = ['ortsgruppe_id','ort','name','lat','lng','zeit','teilnehmerzahl','beschreibung','aktiv', 'inserter_id','changer_id', 'link'];
 
   protected $hidden = [];
 
