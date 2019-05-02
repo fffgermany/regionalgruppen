@@ -26,15 +26,15 @@ class UserController extends Controller
 	'password' => 'required'
     ]);
     $user = User::where('email', $request->input('email'))->first()->makeVisible('password');
+    // ToDo check why Hash check
     if($user && Hash::check($request->input('password'), $user->password) && $user->aktiv > 0 && $user->verified > 0){
 
       $apikey=Hash::make('chilligras'.Str::random(32));
       User::where('email', $request->input('email'))->update(['apikey' => "$apikey"]);;
-      return response()->json(['status' => 'success','apikey' => $apikey]);
+      return response()->json(['status' => 'success','apikey' => $apikey, 'user' => $user]);
     }else{
       return response()->json(['status' => Hash::check($request->input('password'), $user->password)],401);
     }
-    // */
   }
 
   /**

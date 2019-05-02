@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class Ortsgruppe extends Model 
+class DemoPropaganda extends Model 
 {
 
 
-  protected $table="ortsgruppe";
+  protected $table="demopropaganda";
 
-  protected $fillable = ['name','lat','lng','admin_id','description','twitter','facebook','email','telnr','aktiv','inserter_id', 'whatsapp', 'telegram', 'signalmsg', 'instagram'];
+  protected $fillable = ['name','content', 'demo', 'ortsgruppe_id'];
 
   protected $hidden = ['inserter','changer'];
 

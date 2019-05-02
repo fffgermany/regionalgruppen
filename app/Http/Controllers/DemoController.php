@@ -47,9 +47,10 @@ class DemoController extends Controller
       $admin = $request->user();
       $demo->admin_id=$admin->id;
       $demo->inserter_id=$admin->id;
-      if(! $request->user()->superadmin || ! $demo->ortsgruppe_id){
-        $demo->ortsgruppe_id=$admin->ortsgruppe()->id;
-      }
+      // ToDo: klären wofür notwendig
+      // if( $request->user()->superadmin || ! $demo->ortsgruppe_id){
+      //   $demo->ortsgruppe_id=$admin->ortsgruppe()->id;
+      // }
       $demo->save();
       return response()->json(['status' => 'success', 'demo'=>$demo]);
     }else{

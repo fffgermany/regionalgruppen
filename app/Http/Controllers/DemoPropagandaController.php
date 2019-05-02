@@ -35,19 +35,21 @@ class DemoPropagandaController extends Controller
     $this->validate($request, [
       'name' => 'required',
       'content' => 'required',
-      'demo_id' => 'required',
+      'demo' => 'required',
     ]);
     if($demopropaganda = DemoPropaganda::Create($request->all())){
       $admin = $request->user();
       $demopropaganda->inserter_id=$admin->id;
-      $demo = Demo::find($request->demo_id);
       
-      if($demo == null){
-        return $response->json(['status'=>'fail','msg'=>'invalid demo id '.$request->demo_id]);
-      }
-      if($demo->ortsgruppe_id != $admin->ortsgruppe_id && ! $admin->superadmin){
-        return $response->json(['status'=>'fail','msg'=>'invalid demo id '.$request->demo_id]);
-      }
+      // ToDo: FatalThrowableError Class 'App\Http\Controllers\Demo' not found
+      // $demo = Demo::find($request->demo_id);
+      
+      // if($demo == null){
+      //   return $response->json(['status'=>'fail','msg'=>'invalid demo id '.$request->demo_id]);
+      // }
+      // if($demo->ortsgruppe_id != $admin->ortsgruppe_id && ! $admin->superadmin){
+      //   return $response->json(['status'=>'fail','msg'=>'invalid demo id '.$request->demo_id]);
+      // }
 
       $demopropaganda->save();
       return response()->json(['status' => 'success', 'demopropaganda'=>$demopropaganda]);
@@ -90,11 +92,6 @@ class DemoPropagandaController extends Controller
    */
   public function update(Request $request, $id)
   {
-    $this->validate($request, [
-      'name' => 'required',
-      'ort' => 'required',
-      'zeit' => 'required',
-    ]);
     $demopropaganda = DemoPropaganda::find($id);
     if($demopropaganda->fill($request->all())->save()){
       return response()->json(['status' => 'success']);
