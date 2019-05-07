@@ -26,7 +26,10 @@ class UserController extends Controller
 	'password' => 'required'
     ]);
     $user = User::where('email', $request->input('email'))->first()->makeVisible('password');
+    // Log::debug("pass='".$request->password."'\n");
     // ToDo check why Hash check
+    // Log::debug("user = ". $user->email);
+    // Log::debug("check = ". Hash::check($request->password, $user->password));
     if($user && Hash::check($request->input('password'), $user->password) && $user->aktiv > 0 && $user->verified > 0){
 
       $apikey=Hash::make('chilligras'.Str::random(32));
@@ -63,7 +66,9 @@ class UserController extends Controller
     else{
       $user->aktiv=false;
     }
+    // Log::debug("pass='".$request->password."'");
     $user->password=Hash::make($request->password);
+    // Log::debug("hash='".$user->password."'");
     $user->linktoken=Hash::make(Str::random(32));
     $token=$user->linktoken;
     $email=$user->email;
@@ -118,10 +123,13 @@ class UserController extends Controller
 	'linktoken'=>'required'
     ]);
     Log::debug("search user '{$request->input('email')}' name '{$request->input('name')}' linktoken '{$request->input('linktoken')}'");
+    $checkdate = new DateTime();
+    $checkdate->modify('-4 day');
     $alluser = User::where([
 	['email', "=",$request->input('email')],
 	['name', "=",$request->input('name')],
 	['linktoken', "=",$request->input('linktoken')],
+        ['created_at', ">",$checkdate],
     ]);
     $user=$alluser->first();
     Log::debug("user=".print_r($user,1));
@@ -157,35 +165,6 @@ class UserController extends Controller
     catch(Exception $e){
     }
     return response()->json(['status'=>'fail']);
-  }
-
-  public function verify(Request $request){
-    $this->validate($request, [
-	'email' => 'required',
-	'linktoken' => 'required',
-	]);
-
-    $checkdate = new DateTime();
-    $checkdate->modify('-4 day');
-    try{
-      $users = User::where([
-	  ['email', "=",$request->input('email')],
-	  ['linktoken', "=",$request->input('linktoken')],
-	  ['created_at', ">",$checkdate],
-      ]);
-
-      if(count($users) > 0){
-	$user=$users->first();
-	if($user){
-	  $user->verified=1;
-	  $user->save();
-	  return response()->json(['status'=>'success']);
-	};
-      }
-    }
-    catch(Exception $e){
-    }
-    return response()->json(['status'=>'success']);
   }
 
   public function showRegPage(Request $request){
