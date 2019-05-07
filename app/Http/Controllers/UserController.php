@@ -25,12 +25,16 @@ class UserController extends Controller
 	'email' => 'required|email',
 	'password' => 'required'
     ]);
-    $user = User::where('email', $request->input('email'))->first()->makeVisible('password');
+    $user = User::where([
+        ['email', "=", $request->input('email')],
+        ['aktiv', "=", 1],
+        ['verified', "=", 1],
+      ])->first()->makeVisible('password');
     // Log::debug("pass='".$request->password."'\n");
     // ToDo check why Hash check
     // Log::debug("user = ". $user->email);
     // Log::debug("check = ". Hash::check($request->password, $user->password));
-    if($user && Hash::check($request->input('password'), $user->password) && $user->aktiv > 0 && $user->verified > 0){
+    if($user && Hash::check($request->input('password'), $user->password) ){
 
       $apikey=Hash::make('chilligras'.Str::random(32));
       User::where('email', $request->input('email'))->update(['apikey' => "$apikey"]);;
