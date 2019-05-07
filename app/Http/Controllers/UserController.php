@@ -54,7 +54,7 @@ class UserController extends Controller
     if(! $request->has('thesecret') or $request->thesecret != env('thesecret')){
       return response()->json(['status' => 'fail','response'=>"nicht gut!"]);
     }
-    sleep(4);
+    sleep(3);
 
     $user = User::Create($request->all());
     if($request->has('user') && $request->user()->superadmin){
@@ -63,7 +63,7 @@ class UserController extends Controller
     else{
       $user->aktiv=false;
     }
-    $user->password=Hash::make($user->password);
+    $user->password=Hash::make($request->password);
     $user->linktoken=Hash::make(Str::random(32));
     $token=$user->linktoken;
     $email=$user->email;
@@ -106,8 +106,8 @@ class UserController extends Controller
     $mail->Subject = 'Regionalgruppen Registrierung';
     $mail->Body    = "Hallo,\n\nauf der Webseite von FFF hat jemand - hoffentlich du selbst! - deine E-Mail Adresse registriert.\n\n"
       . "Wenn du das nicht warst, bitten wir um Entschuldigung. Wenn du es warst, dann ist hier dein Registrierungs-Link: \n"
-      . $_SERVER['SERVER_NAME']."/api/action/verify?email=$email&name=$name&linktoken=$token" . "\n\n"
-      . " liebe Grï¿½sse, das FFF-Team\n";
+      . $_SERVER['SERVER_NAME'].urlencode("/api/action/verify?email=$email&name=$name&linktoken=$token") . "\n\n"
+      . " liebe Grue¿½sse, das FFF-Team\n";
     $mail->send();
   }
 
