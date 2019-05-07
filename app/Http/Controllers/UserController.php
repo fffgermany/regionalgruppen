@@ -106,7 +106,7 @@ class UserController extends Controller
     $mail->Subject = 'Regionalgruppen Registrierung';
     $mail->Body    = "Hallo,\n\nauf der Webseite von FFF hat jemand - hoffentlich du selbst! - deine E-Mail Adresse registriert.\n\n"
       . "Wenn du das nicht warst, bitten wir um Entschuldigung. Wenn du es warst, dann ist hier dein Registrierungs-Link: \n"
-      . $_SERVER['SERVER_NAME'].urlencode("/api/action/verify?email=$email&name=$name&linktoken=$token") . "\n\n"
+      . $_SERVER['SERVER_NAME']."/api/action/verify?email=".urlencode($email)."&name=".urlencode($name)."&linktoken=$token" . "\n\n"
       . " liebe Grue¿½sse, das FFF-Team\n";
     $mail->send();
   }
@@ -117,21 +117,21 @@ class UserController extends Controller
 	'name' => 'required',
 	'linktoken'=>'required'
     ]);
-    // Log::debug("search user '{$request->input('email')}' name '{$request->input('name')}' linktoken '{$request->input('linktoken')}'");
+    Log::debug("search user '{$request->input('email')}' name '{$request->input('name')}' linktoken '{$request->input('linktoken')}'");
     $alluser = User::where([
 	['email', "=",$request->input('email')],
 	['name', "=",$request->input('name')],
 	['linktoken', "=",$request->input('linktoken')],
     ]);
-    // Log::debug("alluser=".print_r($alluser,1));
     $user=$alluser->first();
-    if($user->verified){
+    Log::debug("user=".print_r($user,1));
+    if($user && $user->verified){
       return response()->json(['status' => 'fail','response'=>"bereits verifiziert"]);
     }
-    if($user->created_at)
-    $user->linktoken=Hash::make(Str::random(32));
-
-
+    if($user->created_at){
+      $user->linktoken=Hash::make(Str::random(32));
+      $user->verified=1;
+    }
     $user->save();
     return response()->json(['status'=>'success']);
   }
