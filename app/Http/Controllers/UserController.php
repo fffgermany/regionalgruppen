@@ -31,7 +31,7 @@ class UserController extends Controller
 
       $apikey=Hash::make('chilligras'.Str::random(32));
       User::where('email', $request->input('email'))->update(['apikey' => "$apikey"]);;
-      return response()->json(['status' => 'success','apikey' => $apikey, 'user' => $user]);
+      return response()->json(['status' => 'success','apikey' => $apikey]);
     }else{
       return response()->json(['status' => Hash::check($request->input('password'), $user->password)],401);
     }
